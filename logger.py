@@ -17,10 +17,11 @@ class Logger(object):
         The simulation class should use this method immediately to log the specific
         parameters of the simulation as the first line of the file.
         '''
-
+        # Or 
+        # f = open(self.file_name, "w") then f.write()
         with open(self.file_name, 'w') as f:
             f.write(f"{pop_size}\t{vacc_percentage}\t{virus_name}\t{mortality_rate}\t{basic_repro_num}\n")
-
+        f.close()
 
         # (finished) TODO: Finish this method. This line of metadata should be tab-delimited
         # it should create the text file that we will store all logs in.
@@ -43,18 +44,19 @@ class Logger(object):
         '''
 
         with open(self.file_name, 'a') as f:
-            if random_person_sick:
+            if did_infect:
                 f.write(f"{person._id} infects {random_person._id} \n")
-            elif not random_person_sick:
+            elif not did_infect and not random_person_sick:
                 f.write(f"{person._id} didn't infect {random_person._id} because vaccinated \n")
-            else:
+            elif not did_infect and random_person_sick:
                 f.write(f"{person._id} didn't infect {random_person._id} because already sick \n")
-
-        # TODO: Finish this method. Think about how the booleans passed (or not passed)
+        f.close()
+        
+        # (finished) TODO: Finish this method. Think about how the booleans passed (or not passed)
         # represent all the possible edge cases. Use the values passed along with each person,
         # along with whether they are sick or vaccinated when they interact to determine
         # exactly what happened in the interaction and create a String, and write to your logfile.
-        pass
+        # pass
 
     def log_infection_survival(self, person, did_die_from_infection):
         ''' The Simulation object uses this method to log the results of every
@@ -65,17 +67,17 @@ class Logger(object):
         '''
 
         with open(self.file_name, 'a') as f:
-            if not did_die_from_infection:
+            if did_die_from_infection:
                 f.write(f"{person._id} died from infection\n")
-            elif did_die_from_infection:
+            elif not did_die_from_infection:
                 f.write(f"{person._id} survived infection\n")
-            
+        f.close()
 
 
-        # TODO: Finish this method. If the person survives, did_die_from_infection
+        # (finished) TODO: Finish this method. If the person survives, did_die_from_infection
         # should be False.  Otherwise, did_die_from_infection should be True.
         # Append the results of the infection to the logfile
-        pass
+        # pass
 
     def log_time_step(self, time_step_number):
         ''' STRETCH CHALLENGE DETAILS:
