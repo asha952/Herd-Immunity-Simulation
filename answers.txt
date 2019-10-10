@@ -8,7 +8,7 @@ Virus name: Diphtheria
 Mortality rate: .08
 Reproductive rate: .60
 
-The percentage of infected was 0.2672% 
-The percentage of death was 0.0068%
+The percentage of infected was 0.2648% 
+The percentage of death was 0.0092%
 
-Total interactions that were saved from infection due in vaccination was 56339
+Total interactions that were saved from infection due in vaccination was 54963

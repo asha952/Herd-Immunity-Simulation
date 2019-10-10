@@ -192,19 +192,20 @@ class Simulation(object):
                         self.interaction(person, random_person)
                     # print(interaction_count)
                 interaction_count = 0
-                if person.did_survive_infection():
-                    self.logger.log_infection_survival(person, False)
-                else:
-                    self.total_dead += 1
-        # for person in self.population:
-        #     if person.is_alive and person.infection:
         #         if person.did_survive_infection():
         #             self.logger.log_infection_survival(person, False)
-        #         # Person died
         #         else:
+        #             self.total_dead += 1
         #             self.logger.log_infection_survival(person, True)
-        #             self.current_infected -= 1
-        #             self.total_dead =+ 1
+
+        for person in self.population:
+            if person.is_alive and person.infection:
+                if person.did_survive_infection():
+                    self.logger.log_infection_survival(person, False)
+                # Else Person dies
+                else:
+                    self.logger.log_infection_survival(person, True)
+                    self.total_dead += 1
 
     def interaction(self, person, random_person):
         '''This method should be called any time two living people are selected for an
@@ -290,8 +291,8 @@ class Simulation(object):
 
 #     sim.run()
 
-virus = Virus("Ebola", 0.90, 0.25)
-sim = Simulation(250, .90, virus, 10)
+# virus = Virus("Ebola", 0.90, 0.25)
+# sim = Simulation(250, .90, virus, 10)
 # sim.run()
 
 virus2 = Virus("Diphtheria", 0.60, 0.08)
