@@ -20,7 +20,7 @@ class Logger(object):
         # Or 
         # f = open(self.file_name, "w") then f.write()
         with open(self.file_name, 'w') as f:
-            f.write(f"{pop_size}\t{vacc_percentage}\t{virus_name}\t{mortality_rate}\t{basic_repro_num}\n")
+            f.write(f"Pop_size: {pop_size}\t Vacc_Percentage: {vacc_percentage}\tVirus Name: {virus_name}\tMortality Rate: {mortality_rate}\t Reproductive Rate: {basic_repro_num}\n")
         f.close()
 
         # (finished) TODO: Finish this method. This line of metadata should be tab-delimited
@@ -71,7 +71,7 @@ class Logger(object):
         with open(self.file_name, 'a') as f:
             if did_die_from_infection:
                 f.write(f"Person ID: {person._id} died from infection\n")
-            else:
+            elif not did_die_from_infection:
                 f.write(f"Person ID: {person._id} survived infection\n")
         f.close()
 

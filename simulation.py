@@ -39,7 +39,7 @@ class Simulation(object):
         # At the end of each time step, call self._infect_newly_infected()
         # and then reset .newly_infected back to an empty list.
         self.pop_size = pop_size # Int
-        self.next_person_id = 0 # Int
+        self.next_person_id = 1 # Int
         self.virus = virus # Virus object
         self.initial_infected = initial_infected # Int
         self.total_infected = 0 # Int
@@ -50,7 +50,6 @@ class Simulation(object):
         self.save_from_vac = 0
         # self.newly_dead = [] # To return newly dead perons
         self.population = self._create_population(self.initial_infected) # List of Person objects, this is created right after calling simulation class
-
 
         self.file_name = "_virus_name_{}_simulation_pop_{}_vp_{}_infected_{}.txt".format(
             self.virus.name, pop_size, vacc_percentage, initial_infected)
@@ -130,6 +129,7 @@ class Simulation(object):
         # print(vaccinated)
         # print(self.total_dead)
         # print(vaccinated + self.total_dead)
+
         if (vaccinated + self.total_dead) >= self.pop_size:
             return False
         else:
@@ -155,6 +155,7 @@ class Simulation(object):
 
         time_step_counter = 0
         should_continue = self._simulation_should_continue()
+        self.logger.write_metadata(self.pop_size, self.vacc_percentage, self.virus.name, self.virus.mortality_rate, self.virus.repro_rate)
 
         while should_continue:
             # print("test")
@@ -291,10 +292,10 @@ class Simulation(object):
 
 #     sim.run()
 
-# virus = Virus("Ebola", 0.90, 0.25)
-# sim = Simulation(250, .90, virus, 10)
-# sim.run()
+virus = Virus("Ebola", 0.90, 0.25)
+sim = Simulation(250, .90, virus, 10)
+sim.run()
 
-virus2 = Virus("Diphtheria", 0.60, 0.08)
-sim2 = Simulation(5000, .88, virus2, 10)
-sim2.run()
+# virus2 = Virus("Diphtheria", 0.60, 0.08)
+# sim2 = Simulation(5000, .88, virus2, 10)
+# sim2.run()

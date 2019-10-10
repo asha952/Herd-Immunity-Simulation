@@ -18,5 +18,5 @@ def test_simulation_should_continue():
 
     assert sim._simulation_should_continue()
 
-def test_run():
+def test_interactor():
     
