@@ -130,6 +130,7 @@ class Simulation(object):
         # print(self.total_dead)
         # print(vaccinated + self.total_dead)
 
+        # Stops if the total of vaccinated people and dead is equal to or less than pop size
         if (vaccinated + self.total_dead) >= self.pop_size:
             return False
         else:
@@ -157,6 +158,7 @@ class Simulation(object):
         should_continue = self._simulation_should_continue()
         self.logger.write_metadata(self.pop_size, self.vacc_percentage, self.virus.name, self.virus.mortality_rate, self.virus.repro_rate)
 
+        # Determins if the simulation should continue
         while should_continue:
             # print("test")
             self.time_step()
@@ -168,6 +170,7 @@ class Simulation(object):
             # should_continue = self._simulation_should_continue
 
         print(f"The simulation has ended after {time_step_counter} turns.")
+        # Prints out the logger at the end of the run
         self.logger.log_percentage(self.pop_size, self.total_dead, self.total_infected, self.save_from_vac)
 
     def time_step(self):
@@ -183,6 +186,7 @@ class Simulation(object):
                 increment interaction counter by 1.
             '''
         # TODO: Finish this method.
+
         interaction_count = 0
         for person in self.population:
             if person.infection == self.virus and person.is_alive:
@@ -199,6 +203,7 @@ class Simulation(object):
         #             self.total_dead += 1
         #             self.logger.log_infection_survival(person, True)
 
+        # Checks to see if the infected person dies or survives
         for person in self.population:
             if person.is_alive and person.infection:
                 if person.did_survive_infection():
@@ -235,6 +240,7 @@ class Simulation(object):
         # TODO: Call slogger method during this method.
 
         # if random_person.is_vaccinated or random_person.infection:
+        
         
         if random_person.is_vaccinated is True:
             self.save_from_vac += 1
