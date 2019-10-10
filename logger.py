@@ -46,10 +46,12 @@ class Logger(object):
         with open(self.file_name, 'a') as f:
             if did_infect:
                 f.write(f"{person._id} infects {random_person._id} \n")
-            elif not did_infect and not random_person_sick:
+            elif random_person_vacc:
                 f.write(f"{person._id} didn't infect {random_person._id} because vaccinated \n")
-            elif not did_infect and random_person_sick:
+            elif random_person_sick:
                 f.write(f"{person._id} didn't infect {random_person._id} because already sick \n")
+            else:
+                f.write(f"{person._id} faild to infect {random_person._id} \n")
         f.close()
         
         # (finished) TODO: Finish this method. Think about how the booleans passed (or not passed)
@@ -69,7 +71,7 @@ class Logger(object):
         with open(self.file_name, 'a') as f:
             if did_die_from_infection:
                 f.write(f"{person._id} died from infection\n")
-            elif not did_die_from_infection:
+            else:
                 f.write(f"{person._id} survived infection\n")
         f.close()
 

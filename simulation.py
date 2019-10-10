@@ -14,7 +14,7 @@ class Simulation(object):
     population that are vaccinated, the size of the population, and the amount of initially
     infected people in a population are all variables that can be set when the program is run.
     '''
-    # TODO: move defaulted variable class to the end (After virus)
+    # (finished) TODO: move defaulted variable class to the end (After virus)
     def __init__(self, pop_size, vacc_percentage, virus, initial_infected=1):
         ''' Logger object logger records all events during the simulation.
         Population represents all Persons in the population.
@@ -51,7 +51,7 @@ class Simulation(object):
 
 
         self.file_name = "_virus_name_{}_simulation_pop_{}_vp_{}_infected_{}.txt".format(
-            virus.name, pop_size, vacc_percentage, initial_infected)
+            self.virus.name, pop_size, vacc_percentage, initial_infected)
         self.logger = Logger(self.file_name)
 
 
@@ -75,20 +75,26 @@ class Simulation(object):
         # the correct intial vaccination percentage and initial infected.
         
         population = []
-        # Intial infected
+        # Initial infected
         for i in range(self.initial_infected):
             infected_person = Person(i + 1, False, self.virus) # Creating a Person object
             population.append(infected_person)
-        # Uninfected vaccinated
+        #  Vaccinated
         for i in range(int(self.vacc_percentage * self.pop_size)):
-            uninfected_vaccinated_person = Person(1 + len(population), True)
-            population.append(uninfected_vaccinated_person)
-        # Uninfected unvaccinated
+            vaccinated_person = Person(1 + len(population), True)
+            population.append(vaccinated_person)
+        #  Unvaccinated
         for i in range(self.pop_size - self.initial_infected - int(self.vacc_percentage * self.pop_size)):
-            uninfected_unvaccinated_person = Person(1 + len(population), False)
-            population.append(uninfected_unvaccinated_person)
+            unvaccinated_person = Person(1 + len(population), False)
+            population.append(unvaccinated_person)
 
         return population
+
+    def print_pop(self):
+        print(self.population)
+        print(len(self.population))
+        print(self.initial_infected)
+        print(self.vacc_percentage)
 
     def _simulation_should_continue(self):
         ''' The simulation should only end if the entire population is dead
@@ -98,7 +104,7 @@ class Simulation(object):
                 bool: True for simulation should continue, False if it should end.
         '''
         # TODO: Complete this helper method.  Returns a Boolean.
-        if len(self.population) == 0 or self.vacc_percentage == 1:
+        if self.total_dead + (self.vacc_percentage * self.pop_size) >= self.pop_size:
             should_continue = False
         else:
             should_continue = True
@@ -120,15 +126,15 @@ class Simulation(object):
         should_continue = True
 
         while should_continue:
-            if self._simulation_should_continue:
+            if self._simulation_should_continue():
                 time_step_counter += 1
-                should_continue = True
+                print("test")
                 self.time_step()
                 # self.logger.log_time_step(time_step_counter)
             else:
                 should_continue = False
 
-        print('The simulation has ended after {time_step_counter} turns.'.format(time_step_counter))
+        print('The simulation has ended after {} turns.'.format(time_step_counter))
 
     def time_step(self):
         ''' This method should contain all the logic for computing one time step
@@ -179,7 +185,20 @@ class Simulation(object):
             #     attribute can be changed to True at the end of the time step.
         # TODO: Call slogger method during this method.
 
+        # if random_person.is_vaccinated or random_person.infection:
+            
+        
+        virus_defense_0 = random.uniform(0.0, 1.0)
 
+        if virus_defense_0 < virus.repro_rate:
+            random_person.infection = True
+            self.newly_infected.append(random_person._id)
+            self.logger.log_infection_survival(person, random_person)
+        elif virus_defense_0 > virus.repro_rate:
+            random_person.infection = False
+
+        
+        
 
     def _infect_newly_infected(self):
         ''' This method should iterate through the list of ._id stored in self.newly_infected
@@ -187,24 +206,32 @@ class Simulation(object):
         # TODO: Call this method at the end of every time step and infect each Person.
         # TODO: Once you have iterated through the entire list of self.newly_infected, remember
         # to reset self.newly_infected back to an empty list.
-        pass
 
+        for id in self.newly_infected:
+            for people in self.population:
+                if id == people._id:
+                    people = Person(id, False, virus)
 
-if __name__ == "__main__":
-    params = sys.argv[1:]
-    virus_name = str(params[2])
-    repro_num = float(params[3])
-    mortality_rate = float(params[4])
+        self.newly_infected  = []
 
-    pop_size = int(params[0])
-    vacc_percentage = float(params[1])
+# if __name__ == "__main__":
+#     params = sys.argv[1:]
+#     virus_name = str(params[2])
+#     repro_num = float(params[3])
+#     mortality_rate = float(params[4])
 
-    if len(params) == 6:
-        initial_infected = int(params[5])
-    else:
-        initial_infected = 1
+#     pop_size = int(params[0])
+#     vacc_percentage = float(params[1])
 
-    virus = Virus(virus_name, repro_num, mortality_rate)
-    sim = Simulation(pop_size, vacc_percentage, virus, initial_infected)
+#     if len(params) == 6:
+#         initial_infected = int(params[5])
+#     else:
+#         initial_infected = 1
 
-    sim.run()
+#     virus = Virus(virus_name, repro_num, mortality_rate)
+#     sim = Simulation(pop_size, vacc_percentage, virus, initial_infected)
+
+#     sim.run()
+virus = Virus("Ebola", 0.99, 0.25)
+sim = Simulation(100, .90, virus, 10)
+sim.run()
