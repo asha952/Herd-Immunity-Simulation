@@ -295,5 +295,5 @@ sim = Simulation(250, .90, virus, 10)
 # sim.run()
 
 virus2 = Virus("Diphtheria", 0.60, 0.08)
-sim2 = Simulation(500, .88, virus2, 10)
+sim2 = Simulation(5000, .88, virus2, 10)
 sim2.run()
