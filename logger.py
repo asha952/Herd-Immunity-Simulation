@@ -45,13 +45,13 @@ class Logger(object):
 
         with open(self.file_name, 'a') as f:
             if did_infect:
-                f.write(f"{person._id} infects {random_person._id} \n")
+                f.write(f"Person ID: {person._id} infects Random Person ID: {random_person._id} \n")
             elif random_person_vacc:
-                f.write(f"{person._id} didn't infect {random_person._id} because vaccinated \n")
+                f.write(f"Person ID: {person._id} didn't infect Random Person ID: {random_person._id} because vaccinated \n")
             elif random_person_sick:
-                f.write(f"{person._id} didn't infect {random_person._id} because already sick \n")
+                f.write(f"Person ID: {person._id} didn't infect Random Person ID: {random_person._id} because already sick \n")
             else:
-                f.write(f"{person._id} faild to infect {random_person._id} \n")
+                f.write(f"Person ID: {person._id} faild to infect Random Person ID: {random_person._id} \n")
         f.close()
         
         # (finished) TODO: Finish this method. Think about how the booleans passed (or not passed)
@@ -70,9 +70,9 @@ class Logger(object):
 
         with open(self.file_name, 'a') as f:
             if did_die_from_infection:
-                f.write(f"{person._id} died from infection\n")
+                f.write(f"Person ID: {person._id} died from infection\n")
             else:
-                f.write(f"{person._id} survived infection\n")
+                f.write(f"Person ID: {person._id} survived infection\n")
         f.close()
 
 
@@ -81,7 +81,8 @@ class Logger(object):
         # Append the results of the infection to the logfile
         # pass
 
-    def log_time_step(self, time_step_number):
+    def log_time_step(self, time_step_number, total_dead,
+        total_infected):
         ''' STRETCH CHALLENGE DETAILS:
 
         If you choose to extend this method, the format of the summary statistics logged
@@ -99,4 +100,13 @@ class Logger(object):
         # TODO: Finish this method. This method should log when a time step ends, and a
         # new one begins.
         # NOTE: Here is an opportunity for a stretch challenge!
-        pass
+        
+        with open(self.file_name, mode='a') as f:
+            f.write(f"Time step number: {time_step_number} total dead: {total_dead} total infected: {total_infected}\n")
+
+    def log_percentage(self, pop_size, total_dead, total_infected, saved_from_vac):
+        infected_percentage = f"{float(total_infected / pop_size)}%"
+        dead_percentage = f"{float(total_dead / pop_size)}%"
+
+        with open(self.file_name, mode='a') as f:
+            f.write(f"Infected percentage: {infected_percentage} Dead_percentage: {dead_percentage} Interactions saved from vaccination: {saved_from_vac}")

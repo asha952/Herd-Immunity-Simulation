@@ -34,17 +34,17 @@ class Person(object):
             self.infection = None
             return True
         elif self.infection.mortality_rate >= virus_defense:
-            print(self.infection.mortality_rate)
             self.is_alive = False
+            self.infection = None
             return False
 
 # Just testing the code to make sure it works
-virus = Virus("Dysentery", 0.7, 0.2)
-person = Person(4, False, virus)
+# virus = Virus("Dysentery", 0.7, 0.2)
+# person = Person(4, False, virus)
 # yes = person.did_survive_infection()
-survived = person.did_survive_infection()
-if survived:
-    print(not person.is_alive)
+# survived = person.did_survive_infection()
+# if survived:
+#     print(not person.is_alive)
 
 
 ''' These are simple tests to ensure that you are instantiating your Person class correctly. '''
