@@ -27,10 +27,20 @@ def test_log_infection_survial():
 
 
     with open("test2.txt", "r") as f:
-        test_content = f.readlines()
+        test_content = f.readlines() # Reading line by line so can use [] 
 
     assert test_content[0] == ("Person ID: 1 died from infection\n")
 
     os.remove("test2.txt")
-                
+
+def test_percentage():
+    log = Logger("test3.txt")
+    log.log_percentage(100, 10, 10, 200)
+
+    with open("test3.txt", "r") as f:
+        test_content = f.readlines()    
+
+    assert test_content[0] == f"Infected percentage: 0.1% Dead_percentage: 0.1% Interactions saved from vaccination: 200"
+
+    os.remove("test3.txt")
 

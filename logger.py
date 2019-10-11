@@ -101,12 +101,12 @@ class Logger(object):
         # new one begins.
         # NOTE: Here is an opportunity for a stretch challenge!
         
-        with open(self.file_name, mode='a') as f:
+        with open(self.file_name, 'a') as f:
             f.write(f"Time step number: {time_step_number} total dead: {total_dead} total infected: {total_infected}\n")
 
     def log_percentage(self, pop_size, total_dead, total_infected, saved_from_vac):
         infected_percentage = f"{float(total_infected / pop_size)}%"
         dead_percentage = f"{float(total_dead / pop_size)}%"
 
-        with open(self.file_name, mode='a') as f:
+        with open(self.file_name, 'a') as f:
             f.write(f"Infected percentage: {infected_percentage} Dead_percentage: {dead_percentage} Interactions saved from vaccination: {saved_from_vac}")
