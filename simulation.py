@@ -105,11 +105,13 @@ class Simulation(object):
         '''
         # TODO: Complete this helper method.  Returns a Boolean.
 
-        # Count alive vaccinated people
+        # Getting all persons with each properties of the population to determined if need to run
+        # Only run when there's unvaccinated person(s) left
         vaccinated_count = 0
         total_dead_count = 0
         infected_count = 0
 
+        # Checking population for all cases
         for person in self.population:
             # Add vaccinated individuals
             if person.is_alive and person.is_vaccinated: # Method from Person class
@@ -122,13 +124,15 @@ class Simulation(object):
                 infected_count += 1
 
         # Checks if everyone is dead or no more infected
-        if self.total_dead == self.population or infected_count == 0:
+        if self.total_dead == self.pop_size or infected_count == 0:
+            # print("no more infected")
             return False
 
         # All surviors are vaccinated
         if vaccinated_count == self.pop_size - total_dead_count:
+            # print("vacc dead")
             return False
-        # Else return True
+        # Else return
         return True
 
     # Runs and ends
@@ -151,8 +155,10 @@ class Simulation(object):
 
         # Determines if the simulation should continue
         while should_continue:
+            # print(self.current_infected)
             self.time_step()
             self._infect_newly_infected()
+            # print(self.current_infected)
             time_step_counter += 1
             self.logger.log_time_step(time_step_counter, self.total_dead, self.total_infected)
             # To determin if this run method should run once more
@@ -182,19 +188,16 @@ class Simulation(object):
                 while interaction_count < 100:
                     random_person = random.choice(self.population)
                     if random_person.is_alive and random_person._id != person._id:
+                        # Only counts as interaction if random person is alive and id not equal to person id
                         interaction_count += 1
                         self.interaction(person, random_person)
                     # print(interaction_count)
                 interaction_count = 0
-        #         if person.did_survive_infection():
-        #             self.logger.log_infection_survival(person, False)
-        #         else:
-        #             self.total_dead += 1
-        #             self.logger.log_infection_survival(person, True)
 
         # Checks to see if the infected person dies or survives
         for person in self.population:
             if person.is_alive and person.infection:
+                # self.current_infected += 1
                 # So they are infected with virus object you can now 
                 # call the did_surive_infection from Person to see if they died or not
                 # Also, remember calling did_survive_infect will not only see if dead or alive but
@@ -267,7 +270,6 @@ class Simulation(object):
         # Returns empty because you want the next round to be empty so you can use it
         self.newly_infected  = []
 
-## Uncomment to run with inputs from terminal !!!
 ## Use the following ordering in terminal when using sys.argv to run, just like the how the README is instructed:
 ## python3 simulation.py 100000 0.90 Ebola 0.70 0.25 10
 if __name__ == "__main__":
