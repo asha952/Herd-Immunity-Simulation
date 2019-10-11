@@ -44,3 +44,16 @@ def test_percentage():
 
     os.remove("test3.txt")
 
+def test_log_interaction():
+    log = Logger("test4.txt")
+    person1 = Person(2, True)
+    random_person1 = Person(4, True)
+    log.log_interaction(person1, random_person1)
+
+    with open("test4.txt") as f:
+        test_content = f.readlines()
+
+    assert test_content[0] == f"Person ID: 2 faild to infect Random Person ID: 4 \n"
+
+    os.remove("test4.txt")
+
