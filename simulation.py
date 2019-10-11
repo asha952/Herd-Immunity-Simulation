@@ -106,16 +106,30 @@ class Simulation(object):
         # TODO: Complete this helper method.  Returns a Boolean.
 
         # Count alive vaccinated people
-        vaccinated = 0
-        for person in self.population:
-            if person.is_alive and person.is_vaccinated: # Method from Person class
-                vaccinated += 1
+        vaccinated_count = 0
+        total_dead_count = 0
+        infected_count = 0
 
-        # Stops if the total of vaccinated people and dead people is equal to or greater than pop size
-        if (vaccinated + self.total_dead) >= self.pop_size: # Will work with == but more cautious to use >=
+        for person in self.population:
+            # Add vaccinated individuals
+            if person.is_alive and person.is_vaccinated: # Method from Person class
+                vaccinated_count += 1
+            # Add dead individuals
+            if not person.is_alive:
+                total_dead_count += 1
+            # Add infected individuals
+            if person.infection:
+                infected_count += 1
+
+        # Checks if everyone is dead or no more infected
+        if self.total_dead == self.population or infected_count == 0:
             return False
-        else:
-            return True
+
+        # All surviors are vaccinated
+        if vaccinated_count == self.pop_size - total_dead_count:
+            return False
+        # Else return True
+        return True
 
     # Runs and ends
     def run(self):
@@ -183,6 +197,8 @@ class Simulation(object):
             if person.is_alive and person.infection:
                 # So they are infected with virus object you can now 
                 # call the did_surive_infection from Person to see if they died or not
+                # Also, remember calling did_survive_infect will not only see if dead or alive but
+                # Changes that Person to become vaccinated so vaccination = True, if they win the fight with virus
                 if person.did_survive_infection():
                     self.logger.log_infection_survival(person, False)
                 # Else Person dies
@@ -226,7 +242,7 @@ class Simulation(object):
         elif random_person.infection is not None:
             self.logger.log_interaction(person, random_person, True, None, None)
         else:
-            if random.random() <= self.virus.repro_rate: # Random # (defense power) less than virus so they get infect
+            if random.random() <= self.virus.repro_rate: # Random # (infect defense power) less than virus so they get infect
                 self.newly_infected.append(random_person._id)
                 self.total_infected += 1
                 self.logger.log_interaction(person, random_person, None, None, True) # Defense less to did infect
@@ -251,32 +267,33 @@ class Simulation(object):
         # Returns empty because you want the next round to be empty so you can use it
         self.newly_infected  = []
 
-# if __name__ == "__main__":
-#     params = sys.argv[1:]
-#     virus_name = str(params[2])
-#     repro_num = float(params[3])
-#     mortality_rate = float(params[4])
+## Uncomment to run with inputs from terminal !!!
+## Use the following ordering in terminal when using sys.argv to run, just like the how the README is instructed:
+## python3 simulation.py 100000 0.90 Ebola 0.70 0.25 10
+if __name__ == "__main__":
+    params = sys.argv[1:]
+    virus_name = str(params[2])
+    repro_num = float(params[3])
+    mortality_rate = float(params[4])
 
-#     pop_size = int(params[0])
-#     vacc_percentage = float(params[1])
+    pop_size = int(params[0])
+    vacc_percentage = float(params[1])
 
-#     if len(params) == 6:
-#         initial_infected = int(params[5])
-#     else:
-#         initial_infected = 1
+    if len(params) == 6:
+        initial_infected = int(params[5])
+    else:
+        initial_infected = 1
 
-#     virus = Virus(virus_name, repro_num, mortality_rate)
-#     sim = Simulation(pop_size, vacc_percentage, virus, initial_infected)
+    virus = Virus(virus_name, repro_num, mortality_rate)
+    sim = Simulation(pop_size, vacc_percentage, virus, initial_infected)
 
-#     sim.run()
+    sim.run()
 
-# Type the follwing into terminal to run when using sys.argv:
-# python3 simulation.py 100000 0.90 Ebola 0.70 0.25 10
 
-# Or run python file with attributes as below:
-virus = Virus("Ebola", 0.90, 0.25)
-sim = Simulation(500, .90, virus, 10)
-sim.run()
+# Or run as python3 simulation.py in terminal with something like:
+# virus = Virus("Ebola", 0.90, 0.25)
+# sim = Simulation(500, .90, virus, 10)
+# sim.run()
 
 # virus2 = Virus("Diphtheria", 0.60, 0.08)
 # sim2 = Simulation(5000, .88, virus2, 10)
